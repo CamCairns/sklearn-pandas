@@ -34,7 +34,7 @@ class DataFrameMapper(BaseEstimator, TransformerMixin):
     """
 
     def __init__(self, features, default=False, sparse=False):
-        """
+        '''
         Params:
 
         features    a list of pairs. The first element is the pandas column
@@ -50,10 +50,12 @@ class DataFrameMapper(BaseEstimator, TransformerMixin):
 
         sparse      will return sparse matrix if set True and any of the
                     extracted features is sparse. Defaults to False.
-        """
+        '''
+        print "YAHOO"
         if isinstance(features, list):
             features = [(columns, _build_transformer(transformers))
                         for (columns, transformers) in features]
+            print "YAHOO", features
         self.features = features
         self.default = _build_transformer(default)
         self.sparse = sparse
