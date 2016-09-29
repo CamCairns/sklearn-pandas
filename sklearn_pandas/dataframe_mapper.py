@@ -12,9 +12,9 @@ string_types = str if sys.version_info >= (3, 0) else basestring
 
 
 def _handle_feature(fea):
-    """
+    '''
     Convert 1-dimensional arrays to 2-dimensional column vectors.
-    """
+    '''
     if len(fea.shape) == 1:
         fea = np.array([fea]).T
 
@@ -28,10 +28,10 @@ def _build_transformer(transformers):
 
 
 class DataFrameMapper(BaseEstimator, TransformerMixin):
-    """
+    '''
     Map Pandas data frame column subsets to their own
     sklearn transformation.
-    """
+    '''
 
     def __init__(self, features, default=False, sparse=False):
         '''
@@ -51,7 +51,6 @@ class DataFrameMapper(BaseEstimator, TransformerMixin):
         sparse      will return sparse matrix if set True and any of the
                     extracted features is sparse. Defaults to False.
         '''
-        print "YAHOO"
         if isinstance(features, list):
             features = [(columns, _build_transformer(transformers))
                         for (columns, transformers) in features]
@@ -62,9 +61,9 @@ class DataFrameMapper(BaseEstimator, TransformerMixin):
 
     @property
     def _selected_columns(self):
-        """
+        '''
         Return a set of selected columns in the feature list.
-        """
+        '''
         selected_columns = set()
         for feature in self.features:
             columns = feature[0]
@@ -75,14 +74,14 @@ class DataFrameMapper(BaseEstimator, TransformerMixin):
         return selected_columns
 
     def _unselected_columns(self, X):
-        """
+        '''
         Return list of columns present in X and not selected explicitly in the
         mapper.
 
         Unselected columns are returned in the order they appear in the
         dataframe to avoid issues with different ordering during default fit
         and transform steps.
-        """
+        '''
         X_columns = list(X.columns)
         return [column for column in X_columns if
                 column not in self._selected_columns]
@@ -98,7 +97,7 @@ class DataFrameMapper(BaseEstimator, TransformerMixin):
         self.default = state.get('default', False)
 
     def _get_col_subset(self, X, cols):
-        """
+        '''
         Get a subset of columns from the given table X.
 
         X       a Pandas dataframe; the table to select columns from
@@ -106,7 +105,7 @@ class DataFrameMapper(BaseEstimator, TransformerMixin):
                 to select
 
         Returns a numpy array with the data from the selected columns
-        """
+        '''
         return_vector = False
         if isinstance(cols, string_types):
             return_vector = True
@@ -128,14 +127,14 @@ class DataFrameMapper(BaseEstimator, TransformerMixin):
         return t
 
     def fit(self, X, y=None):
-        """
+        '''
         Fit a transformation from the pipeline
 
         X       the data to fit
 
         y       the target vector relative to X, optional
 
-        """
+        '''
         for columns, transformers in self.features:
             if transformers is not None:
                 _call_fit(transformers.fit,
@@ -148,11 +147,11 @@ class DataFrameMapper(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
-        """
+        '''
         Transform the given data. Assumes that fit has already been called.
 
         X       the data to transform
-        """
+        '''
         extracted = []
         for columns, transformers in self.features:
             # columns could be a string or list of

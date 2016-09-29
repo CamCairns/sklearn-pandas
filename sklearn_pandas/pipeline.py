@@ -4,7 +4,7 @@ from sklearn.utils import tosequence
 
 
 def _call_fit(fit_method, X, y=None, **kwargs):
-    """
+    '''
     helper function, calls the fit or fit_transform method with the correct
     number of parameters
 
@@ -19,7 +19,7 @@ def _call_fit(fit_method, X, y=None, **kwargs):
     or fit_transform method passed to it in isolation as _call_fit will not
     distinguish TypeError due to incorrect number of arguments from
     other TypeError
-    """
+    '''
     try:
         return fit_method(X, y, **kwargs)
     except TypeError:
@@ -28,13 +28,13 @@ def _call_fit(fit_method, X, y=None, **kwargs):
 
 
 class TransformerPipeline(Pipeline):
-    """
+    '''
     Pipeline that expects all steps to be transformers taking a single X argument,
     an optional y argument,
     and having fit and transform methods.
 
     Code is copied from sklearn's Pipeline
-    """
+    '''
     def __init__(self, steps):
         names, estimators = zip(*steps)
         if len(dict(steps)) != len(steps):
@@ -77,6 +77,7 @@ class TransformerPipeline(Pipeline):
         return self
 
     def fit_transform(self, X, y=None, **fit_params):
+        print "YABADADOOO"
         Xt, fit_params = self._pre_transform(X, y, **fit_params)
         if hasattr(self.steps[-1][-1], 'fit_transform'):
             return _call_fit(self.steps[-1][-1].fit_transform,
@@ -87,6 +88,6 @@ class TransformerPipeline(Pipeline):
 
 
 def make_transformer_pipeline(*steps):
-    """Construct a TransformerPipeline from the given estimators.
-    """
+    '''Construct a TransformerPipeline from the given estimators.
+    '''
     return TransformerPipeline(_name_estimators(steps))
